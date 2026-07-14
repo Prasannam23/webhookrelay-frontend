@@ -1,83 +1,94 @@
-"use client"
+import Link from 'next/link';
+import { Button } from '../components/Button';
+import { Panel } from '../components/Panel';
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-
-export default function PublicPage() {
-  const router = useRouter()
-  const [isAuthenticated, setIsAuthenticated] = useState(null)
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch("/api/sessions/validate")
-        const data = await res.json()
-        setIsAuthenticated(data.valid)
-      } catch (e) {
-        setIsAuthenticated(false)
-      }
-    }
-    checkAuth()
-  }, [])
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-slate-900">SessionGuard</div>
-          {isAuthenticated && (
-            <Link href="/private" className="text-blue-600 hover:text-blue-700 font-medium">
-              Dashboard
-            </Link>
-          )}
+    <div className="mx-auto max-w-5xl px-6">
+      {/* Hero */}
+      <section className="scanlines border-b border-border py-24 text-center">
+        <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-signal">
+          reliable webhook delivery
         </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-        <div className="text-center space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 text-balance">Secure Device Management</h1>
-            <p className="text-xl text-slate-600 text-balance">
-              Control your account access with intelligent device session limits. Stay secure by limiting concurrent
-              logins to just 3 devices.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 py-12">
-            <div className="bg-white rounded-lg border border-slate-200 p-6 text-left">
-              <h3 className="font-semibold text-slate-900">Max Devices</h3>
-              <p className="text-slate-600 text-sm mt-2">Stay in control with a 3-device concurrent login limit</p>
-            </div>
-            <div className="bg-white rounded-lg border border-slate-200 p-6 text-left">
-              <h3 className="font-semibold text-slate-900">Force Logout</h3>
-              <p className="text-slate-600 text-sm mt-2">Remove suspicious sessions instantly from any device</p>
-            </div>
-            <div className="bg-white rounded-lg border border-slate-200 p-6 text-left">
-              <h3 className="font-semibold text-slate-900">Real-time</h3>
-              <p className="text-slate-600 text-sm mt-2">Immediate notifications when your account is accessed</p>
-            </div>
-          </div>
-
-          <div className="pt-8">
-            {isAuthenticated ? (
-              <Link
-                href="/private"
-                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
-              >
-                Go to Dashboard
-              </Link>
-            ) : (
-              <a
-                href="/api/auth/login?returnTo=/auth-callback"
-                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
-              >
-                Login with Auth0
-              </a>
-            )}
-          </div>
+        <h1 className="mt-4 font-mono text-4xl leading-tight text-ink sm:text-5xl">
+          Every event,
+          <br />
+          <span className="text-signal">delivered — eventually.</span>
+        </h1>
+        <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted">
+          Relay sits between your system and your partners&apos; servers. It signs every payload,
+          retries with backoff when an endpoint is down, and shows you exactly what happened —
+          live.
+        </p>
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <Link href="/register">
+            <Button variant="primary">Get started</Button>
+          </Link>
+          <Link href="/help">
+            <Button variant="ghost">How it works</Button>
+          </Link>
         </div>
-      </main>
+      </section>
+
+      {/* Signature element: relay diagram with traveling pulse */}
+      <section className="py-16">
+        <RelayDiagram />
+      </section>
+
+      {/* Feature strip */}
+      <section className="grid grid-cols-1 gap-4 pb-24 sm:grid-cols-3">
+        <Panel eyebrow="Delivery" title="Exponential backoff">
+          <p className="text-sm text-muted">
+            Failed deliveries retry automatically — 5s, then 10s, 20s, and beyond — before landing
+            in a dead-letter queue you can inspect and replay.
+          </p>
+        </Panel>
+        <Panel eyebrow="Security" title="HMAC-signed payloads">
+          <p className="text-sm text-muted">
+            Every request carries a signature your endpoint can verify, so you know it really came
+            from Relay and wasn&apos;t altered in transit.
+          </p>
+        </Panel>
+        <Panel eyebrow="Visibility" title="Live status, no refresh">
+          <p className="text-sm text-muted">
+            Watch deliveries move from queued to retrying to delivered in real time, per
+            subscriber.
+          </p>
+        </Panel>
+      </section>
     </div>
-  )
+  );
+}
+
+function RelayDiagram() {
+  return (
+    <div className="flex items-center justify-between gap-4 rounded-lg border border-border bg-panel px-8 py-12">
+      <Node label="Source system" sub="autopay.success" />
+
+      <div className="relative h-px flex-1 bg-border">
+        <span className="absolute -top-1 left-0 h-2 w-2 animate-[scan_1.6s_linear_infinite] rounded-full bg-signal shadow-hardSm" />
+      </div>
+
+      <Node label="Relay" sub="sign · queue · retry" highlight />
+
+      <div className="relative h-px flex-1 bg-border">
+        <span className="absolute -top-1 left-0 h-2 w-2 animate-[scan_1.6s_linear_infinite] rounded-full bg-signal shadow-hardSm [animation-delay:0.8s]" />
+      </div>
+
+      <Node label="Subscriber" sub="your server" />
+    </div>
+  );
+}
+
+function Node({ label, sub, highlight = false }) {
+  return (
+    <div
+      className={`flex-shrink-0 rounded-md border px-4 py-3 text-center ${
+        highlight ? 'border-signal bg-signal-muted' : 'border-border bg-base'
+      }`}
+    >
+      <div className={`font-mono text-xs ${highlight ? 'text-signal' : 'text-ink'}`}>{label}</div>
+      <div className="mt-0.5 font-mono text-[10px] text-muted">{sub}</div>
+    </div>
+  );
 }

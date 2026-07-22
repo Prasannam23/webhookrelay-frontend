@@ -99,8 +99,8 @@ export default function HelpPage() {
         </Link>
       </div>
       <Link href="https://webhook-tool.vercel.app">
-          <Button variant="primary" className="mt-4">go to testing frontend </Button>
-          <p>your testing url that you can put this as a webUrl then get the secret and then go to the frontend for testing link provided above - https://webhookrelay-vykx.onrender.com </p>
+          <Button variant="primary2" className="mt-8">go to testing frontend </Button>
+          <p className="mt-6">your testing url that you can put this as a webUrl then get the secret and then go to the frontend for testing link provided above - https://webhookrelay-vykx.onrender.com </p>
         </Link>
       
       <div className="mt-10 space-y-3">

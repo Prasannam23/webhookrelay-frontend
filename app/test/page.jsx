@@ -13,9 +13,7 @@ import { DeliveryLogRow } from '../../components/DeliveryLogRow';
 
 const TOPIC = 'autopay.success';
 
-// Generates a free, real, publicly-reachable URL via webhook.site's API —
-// no signup, no setup. This is what makes the whole flow work with zero
-// configuration: the person testing doesn't need their own server running.
+
 async function generateTestEndpoint() {
   const res = await fetch('https://webhook.site/token', { method: 'POST' });
   if (!res.ok) throw new Error('Could not reach webhook.site');
@@ -45,11 +43,11 @@ export default function TestPage() {
   const router = useRouter();
   const { state, dispatch } = useAppStore();
 
-  const [endpoint, setEndpoint] = useState(null); // { targetUrl, viewUrl }
+  const [endpoint, setEndpoint] = useState(null); 
   const [endpointError, setEndpointError] = useState('');
   const [generating, setGenerating] = useState(false);
 
-  const [subscriber, setSubscriber] = useState(null); // created subscriber row
+  const [subscriber, setSubscriber] = useState(null); 
   const [revealedSecret, setRevealedSecret] = useState(null);
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState('');
@@ -140,7 +138,7 @@ export default function TestPage() {
         </p>
       </div>
 
-      {/* Step indicator */}
+      
       <div className="mt-6 flex items-center gap-2">
         {STEPS.map((step, i) => (
           <div key={step.key} className="flex items-center gap-2">
@@ -167,7 +165,7 @@ export default function TestPage() {
         ))}
       </div>
 
-      {/* Step 1 — endpoint */}
+      
       <div className="mt-6">
         <Panel eyebrow="Step 1" title="Get a receiving endpoint">
           {!endpoint ? (
@@ -203,12 +201,33 @@ export default function TestPage() {
                   Open live inbox →
                 </a>
               )}
+              <p className="mt-3 text-xs text-muted">
+                No URL to test with? Generate one on{' '}
+                <a
+                  href="https://webhook-tool.vercel.app/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-signal hover:underline"
+                >
+                  webhook-tool
+                </a>{' '}
+                — it&apos;s backed by{' '}
+                <a
+                  href="https://webhook-tool.onrender.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-signal hover:underline"
+                >
+                  webhook-tool.onrender.com
+                </a>
+                , which validates the signature and shows every event live.
+              </p>
             </div>
           )}
         </Panel>
       </div>
 
-      {/* Step 2 — subscriber */}
+      
       {endpoint && (
         <div className="mt-6">
           <Panel eyebrow="Step 2" title="Register as a subscriber">
@@ -247,7 +266,7 @@ export default function TestPage() {
         </div>
       )}
 
-      {/* Step 3 — send event */}
+      
       {subscriber && (
         <div className="mt-6">
           <Panel eyebrow="Step 3" title="Send a real event">
@@ -269,7 +288,7 @@ export default function TestPage() {
         </div>
       )}
 
-      {/* Step 4 — live log */}
+      
       {subscriber && (
         <div className="mt-6">
           <Panel eyebrow="Live" title="Delivery log">

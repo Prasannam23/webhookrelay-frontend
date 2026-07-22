@@ -4,6 +4,7 @@ export function Button({ children, variant = 'primary', className = '', ...props
 
   const variants = {
     primary: 'bg-signal text-base shadow-hard hover:shadow-hardSm',
+    primary2: 'bg-white text-base shadow-hard hover:bg-gray-100 hover:shadow-hardSm',
     ghost: 'border border-borderStrong text-ink hover:border-signal hover:text-signal',
     danger: 'border border-dead text-dead hover:bg-deadMuted',
   };
